@@ -34,7 +34,7 @@ public class RegistrationTestsWithFakerTests extends TestBase
                 .checkResult("Date of Birth", utils.day + " " + utils.month + "," + utils.year)
                 .checkResult("Subjects", utils.subject)
                 .checkResult("Hobbies", utils.hobbies)
-                .checkResult("Picture", utils.file)
+                .checkResult("Picture", utils.file.replaceAll("img/", ""))
                 .checkResult("Address", utils.currentAddress)
                 .checkResult("State and City", utils.state + " " + utils.city);
 

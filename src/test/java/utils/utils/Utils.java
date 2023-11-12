@@ -36,7 +36,7 @@ public class Utils {
         return faker.options().option(arrayHobby);
     }
     public String setFile() {
-        String [] arrayPictures = {"img/31.jpg", "img/totoro1.jpg", "img/totoro025.jpg"};
+        String [] arrayPictures = {"img/31.jpg","img/totoro1.jpg","img/totoro025.jpg"};
         return faker.options().option(arrayPictures);
 
     }
