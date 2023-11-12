@@ -2,6 +2,7 @@ package pages;
 
 import com.codeborne.selenide.SelenideElement;
 import pages.components.CalendarComponent;
+import pages.components.TableResultComponent;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
@@ -11,7 +12,7 @@ public class RegistrationPage {
 
 
     CalendarComponent calendar = new CalendarComponent();
-
+    TableResultComponent tableResultComponent = new TableResultComponent();
     SelenideElement
             titleLabel = $(".practice-form-wrapper"),
             firstNameInput = $("#firstName"),
@@ -25,9 +26,11 @@ public class RegistrationPage {
             userCurrentAddress = $("#currentAddress"),
             userState = $("#state"),
             userCity = $("#city"),
-            submitButton = $("#submit");
+            submitButton = $("#submit"),
+            titleText = $("#example-modal-sizes-title-lg");
 
-    //           result = $(".modal-content");
+
+ // result = $(".modal-content");
 
 
     public RegistrationPage openPage(String value) {
@@ -126,6 +129,18 @@ public class RegistrationPage {
 
     public RegistrationPage clickSubmit() {
         submitButton.click();
+        return this;
+    }
+
+    public RegistrationPage titleText() {
+        titleText.shouldHave(text("Thanks for submitting the form"));
+
+        return this;
+    }
+
+    public RegistrationPage checkResult(String key, String value) {
+        tableResultComponent.checkResult(key, value);
+
         return this;
     }
 

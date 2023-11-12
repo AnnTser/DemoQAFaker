@@ -1,69 +1,43 @@
 package tests;
 
-import com.codeborne.selenide.Selenide;
-import com.github.javafaker.Faker;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
-import static com.codeborne.selenide.Condition.appear;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.*;
+import utils.utils.Utils;
 
 public class RegistrationTestsWithFakerTests extends TestBase
 {
-  Faker faker = new Faker();
-
-  String firstName = faker.name().firstName();
-  String lastName = faker.name().lastName();
-  String userEmail = faker.internet().emailAddress();
-
-  String streetAddress = faker.address().streetAddress();
-
+    Utils utils = new Utils();
     @Test
     void succesfulRegistrationTest() {
-        open("/automation-practice-form");
-        $(".practice-form-wrapper").shouldHave(text("Student Registration Form"));
-        executeJavaScript("$('#fixedban').remove()");
-        executeJavaScript("$('footer').remove()");
 
 
-        $("#firstName").setValue(firstName);
-        $("#lastName").setValue(lastName);
-        $("#userEmail").setValue(userEmail);
-        $("#genterWrapper").$(byText("Other")).click();
-        $("#userNumber").setValue("0123456789");
-        $("#dateOfBirthInput").click();
-        $(".react-datepicker__month-select").selectOption("July");
-        $(".react-datepicker__year-select").selectOption("1990");
-        $(".react-datepicker__day--030:not(.react-datepicker__day--outside-month)").click();
-        $("#subjectsInput").setValue("Math").pressEnter();
-        $("#hobbiesWrapper").$(byText("Music")).click();
-        $("#uploadPicture").uploadFromClasspath("img/1.png");
-        $("#currentAddress").setValue(streetAddress);
-        $("#state").click();
-        $("#stateCity-wrapper").$(byText("NCR")).click();
-        $("#city").click();
-        $("#stateCity-wrapper").$(byText("Noida")).click();
-        $("#submit").click();
+        registrationPage.openPage("/automation-practice-form")
+                .removeBanners()
+                .setFirstName(utils.firstName)
+                .setLastName(utils.lastName)
+                .setUserEmail(utils.userEmail)
+                .setGender(utils.userGender)
+                .setUserNumber(utils.userNumber)
+                .setDateOfBirth(utils.day, utils.month, utils.year)
+                .setSubjects(utils.subject)
+                .setHobbies(utils.hobbies)
+                .setFile(utils.file)
+                .setCurrentAddress(utils.currentAddress)
+                .setState(utils.state)
+                .setCity(utils.city)
+                .clickSubmit()
 
-        $(".modal-dialog").should(appear);
-        $("#example-modal-sizes-title-lg").shouldHave(text("Thanks for submitting the form"));
-        $(".table-responsive").$(byText("Student Name")).parent().shouldHave(text("Ann" + " Tser"));
-        $(".table-responsive").shouldHave(text("ann@tser.com"));
-        $(".table-responsive").shouldHave(text("0123456789"));
-        $(".table-responsive").shouldHave(text("Other"));
-        $(".table-responsive").shouldHave(text("30 July,1990"));
-        $(".table-responsive").shouldHave(text("Maths"));
-        $(".table-responsive").shouldHave(text("Music"));
-        $(".table-responsive").shouldHave(text("1.png"));
-        $(".table-responsive").shouldHave(text("Moscow BC 11"));
-        $(".table-responsive").shouldHave(text("NCR Noida"));
+                .titleText()
+                .checkResult("Student Name", utils.firstName + " " + utils.lastName)
+                .checkResult("Student Email", utils.userEmail)
+                .checkResult("Gender", utils.userGender)
+                .checkResult("Mobile", utils.userNumber)
+                .checkResult("Date of Birth", utils.day + " " + utils.month + "," + utils.year)
+                .checkResult("Subjects", utils.subject)
+                .checkResult("Hobbies", utils.hobbies)
+                .checkResult("Picture", utils.file.replaceAll("src/test/resources/", ""))
+                .checkResult("Address", utils.currentAddress)
+                .checkResult("State and City", utils.state + " " + utils.city);
+
+
     }
-
-    @AfterEach
-    void afterEach() {
-        Selenide.closeWebDriver();
-    }
-
 }
